@@ -3,6 +3,8 @@ const app = express();
 
 const mysql = require('mysql');
 
+app.use('/register', require('./register'));
+
 // create mysql connection
 const db = mysql.createConnection({
     host: 'localhost',
