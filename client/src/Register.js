@@ -4,6 +4,7 @@ import { validEmail, validUsername, validPassword } from "./Regex";
 export default function Register () {
     const [user, setUser] = useState({});
     const [reigsterError, setRegisterError] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
 
     function updateEmail (e) {
         let updatedUser = user;
@@ -33,6 +34,10 @@ export default function Register () {
         let updatedUser = user;
         updatedUser.birthday = e.target.value;
         setUser(updatedUser);
+    }
+
+    function updateShowPassword (e) {
+        setShowPassword(e.target.checked);
     }
 
     function veryifyUserRegistration() {
@@ -141,6 +146,28 @@ export default function Register () {
         .then((result) => console.log(result));
     }
 
+    function PasswordInput() {
+        if (showPassword) {
+            return (
+                <div>
+                    <p>Password:</p>
+                    <input type="text" value={user.password} onChange={updatePassword}></input>
+                    <p>Confirm Password:</p>
+                    <input type="text" value={user.passwordConfirm} onChange={updatepasswordConfirm}></input>
+                </div>
+            )
+        } else {
+            return (
+                <div>
+                    <p>Password:</p>
+                    <input type="password" value={user.password} onChange={updatePassword}></input>
+                    <p>Confirm Password:</p>
+                    <input type="password" value={user.passwordConfirm} onChange={updatepasswordConfirm}></input>
+                </div>
+            )
+        }
+    }
+
     return (
         <div>
             <h1>Register</h1>
@@ -149,10 +176,9 @@ export default function Register () {
                 <input type="email" onChange={updateEmail}></input>
                 <p>Username:</p>
                 <input type="text" onChange={updateUsername}></input>
-                <p>Password:</p>
-                <input type="text" onChange={updatePassword}></input>
-                <p>Confirm Password:</p>
-                <input type="text" onChange={updatepasswordConfirm}></input>
+                <PasswordInput />
+                <p>Show password:</p>
+                <input type="checkbox" checked={showPassword} onChange={updateShowPassword}></input>
                 <p>Birthday:</p>
                 <input type="date" onChange={updateBirthday}></input>
                 <br></br>
