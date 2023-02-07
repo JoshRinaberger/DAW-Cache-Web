@@ -18,6 +18,16 @@ export default function Register () {
         updatedUser.password = e.target.value;
     }
 
+    function updatepasswordConfirm (e) {
+        let updatedUser = user;
+        updatedUser.passwordConfirm = e.target.value;
+    }
+
+    function updateBirthday (e) {
+        let updatedUser = user;
+        updatedUser.birthday = e.target.value;
+    }
+
     function submitRegistration (e) {
         console.log(user);
 
@@ -36,11 +46,17 @@ export default function Register () {
         <div>
             <h1>Register</h1>
                 <p>Email:</p>
-                <input type="text" onChange={updateEmail}></input>
+                <input type="email" onChange={updateEmail}></input>
                 <p>Username:</p>
                 <input type="text" onChange={updateUsername}></input>
                 <p>Password:</p>
                 <input type="text" onChange={updatePassword}></input>
+                <p>Confirm Password:</p>
+                <input type="text" onChange={updatepasswordConfirm}></input>
+                <p>Birthday:</p>
+                <input type="date" onChange={updateBirthday}></input>
+                <br></br>
+                <br></br>
                 <button onClick={submitRegistration}>Register</button>
         </div>
         

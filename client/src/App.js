@@ -1,3 +1,4 @@
+import "./App.css";
 import React, {useEffect, useState} from 'react';
 import {Route, Routes, Link} from "react-router-dom";
 import Home from './Home.js';
@@ -18,7 +19,7 @@ function App() {
   }, []);*/
 
   return (
-    <>
+    <div className="app">
       <nav>
         <ul>
           <li><Link to='/'>Home</Link></li>
@@ -35,7 +36,7 @@ function App() {
         <Route path="/project/:id" element={<Project />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-    </>
+    </div>
 
   );
 }
