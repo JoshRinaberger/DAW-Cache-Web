@@ -3,6 +3,10 @@ const app = express();
 
 const mysql = require('mysql');
 
+var bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({extended : true}));
+app.use(bodyParser.json());
+
 app.use('/register', require('./register'));
 
 // create mysql connection
