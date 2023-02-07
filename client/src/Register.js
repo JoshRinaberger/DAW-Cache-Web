@@ -41,12 +41,41 @@ export default function Register () {
     }
 
     function veryifyUserRegistration() {
-        if (veryifyUsername() && verifyPassword() && verifyBirthday()) {
+        if (verifyEmail() && veryifyUsername() && verifyPassword() && verifyBirthday()) {
             setRegisterError("");
             return true;
         }
 
         return false;
+    }
+
+    function verifyEmail() {
+        if (user.email === undefined) {
+            setRegisterError("Email is required.");
+            return false;
+        }
+
+        if (user.email === null) {
+            setRegisterError("Email is required.");
+            return false;
+        }
+
+        if (user.email.length > 16) {
+            setRegisterError("Email must be no greater than 254 characters.");
+            return false;
+        }
+
+        if (user.email.length <= 0) {
+            setRegisterError("Email is required.");
+            return false;
+        }
+
+        if (validEmail.test(user.email) === false) {
+            setRegisterError("Email format is not valid.");
+            return false;
+        }
+
+        return true;
     }
 
     function veryifyUsername() {
