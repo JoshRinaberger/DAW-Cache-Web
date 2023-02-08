@@ -34,10 +34,17 @@ export default function Register () {
         let updatedUser = user;
         updatedUser.birthday = e.target.value;
         setUser(updatedUser);
+        verifyBirthday();
     }
 
     function updateShowPassword (e) {
         setShowPassword(e.target.checked);
+        
+        let updatedUser = user;
+        updatedUser.password = "";
+        updatedUser.passwordConfirm = "";
+
+        setUser(updatedUser);
     }
 
     function veryifyUserRegistration() {
@@ -152,7 +159,30 @@ export default function Register () {
     }
 
     function verifyBirthday() {
+        if (user.birthday === undefined) {
+            setRegisterError("Birthday is required.");
+            return false;
+        }
 
+        if (user.birthday === null) {
+            setRegisterError("Birthday is required.");
+            return false;
+        }
+
+        var currentDate = new Date();
+        var birthDate = new Date(user.birthday);
+        console.log(birthDate);
+        var dateDifference = currentDate.getFullYear() - birthDate.getFullYear();
+        var month = currentDate.getMonth() - birthDate.getMonth();
+
+        if (month < 0 || (month === 0 && currentDate.getDate() < birthDate.getDate())) {
+            dateDifference--;
+        }
+
+        if (dateDifference < 13) {
+            setRegisterError("Must be at least 13 years old to register.");
+            return false;
+        }
 
         return true;
     }
@@ -180,18 +210,18 @@ export default function Register () {
             return (
                 <div>
                     <p>Password:</p>
-                    <input type="text" value={user.password} onChange={updatePassword}></input>
+                    <input type="text" onChange={updatePassword}></input>
                     <p>Confirm Password:</p>
-                    <input type="text" value={user.passwordConfirm} onChange={updatepasswordConfirm}></input>
+                    <input type="text" onChange={updatepasswordConfirm}></input>
                 </div>
             )
         } else {
             return (
                 <div>
                     <p>Password:</p>
-                    <input type="password" value={user.password} onChange={updatePassword}></input>
+                    <input type="password" onChange={updatePassword}></input>
                     <p>Confirm Password:</p>
-                    <input type="password" value={user.passwordConfirm} onChange={updatepasswordConfirm}></input>
+                    <input type="password" onChange={updatepasswordConfirm}></input>
                 </div>
             )
         }
