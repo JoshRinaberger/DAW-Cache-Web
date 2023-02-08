@@ -205,28 +205,6 @@ export default function Register () {
         .then((result) => console.log(result));
     }
 
-    function PasswordInput() {
-        if (showPassword) {
-            return (
-                <div>
-                    <p>Password:</p>
-                    <input type="text" onChange={updatePassword}></input>
-                    <p>Confirm Password:</p>
-                    <input type="text" onChange={updatepasswordConfirm}></input>
-                </div>
-            )
-        } else {
-            return (
-                <div>
-                    <p>Password:</p>
-                    <input type="password" onChange={updatePassword}></input>
-                    <p>Confirm Password:</p>
-                    <input type="password" onChange={updatepasswordConfirm}></input>
-                </div>
-            )
-        }
-    }
-
     return (
         <div>
             <h1>Register</h1>
@@ -235,7 +213,10 @@ export default function Register () {
                 <input type="email" onChange={updateEmail}></input>
                 <p>Username:</p>
                 <input type="text" onChange={updateUsername}></input>
-                <PasswordInput />
+                <p>Password:</p>
+                <input type={showPassword ? "text" : "password"} onChange={updatePassword}></input>
+                <p>Confirm Password:</p>
+                <input type={showPassword ? "text" : "password"} onChange={updatepasswordConfirm}></input>
                 <p>Show password:</p>
                 <input type="checkbox" checked={showPassword} onChange={updateShowPassword}></input>
                 <p>Birthday:</p>
