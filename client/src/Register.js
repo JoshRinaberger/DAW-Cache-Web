@@ -34,7 +34,6 @@ export default function Register () {
         let updatedUser = user;
         updatedUser.birthday = e.target.value;
         setUser(updatedUser);
-        verifyBirthday();
     }
 
     function updateShowPassword (e) {
@@ -187,22 +186,31 @@ export default function Register () {
         return true;
     }
 
-    function submitRegistration (e) {
+    async function submitRegistration (e) {
         console.log(user);
 
         if (veryifyUserRegistration() === false) {
             return;
         }
 
-        fetch('/register', {
+        const reponse = await fetch('/register', {
             method: "POST",
             headers: {
                 'Content-type': 'application/json'
             },
             body: JSON.stringify({user})
-        })
-        .then((response) => response.json())
-        .then((result) => console.log(result));
+        });
+
+        const registerResult = await reponse.json();
+        console.log(registerResult);
+
+        if (registerResult.registerStatus == 'register sucess') {
+            setRegisterError("");
+            alert("Register sucess!");
+        } else {
+            setRegisterError(registerResult.registerStatus);
+            alert("Register Error");
+        }
     }
 
     return (
