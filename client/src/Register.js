@@ -198,7 +198,7 @@ export default function Register () {
             headers: {
                 'Content-type': 'application/json'
             },
-            body: JSON.stringify({user})
+            body: JSON.stringify({ user })
         });
 
         const registerResult = await reponse.json();

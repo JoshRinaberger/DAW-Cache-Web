@@ -21,8 +21,25 @@ export default function Login () {
         setShowPassword(e.target.checked);
     }
 
-    function login (e) {
+    async function login (e) {
         console.log(loginCredentials);
+
+        if (loginCredentials.accountName === undefined || loginCredentials.password === undefined ||
+            loginCredentials.accountName.length === 0 || loginCredentials.password.length === 0) {
+            setLoginError("Username and password required.");
+            return;
+        } 
+
+        const reponse = await fetch('/login', {
+            method: "POST",
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({ loginCredentials })
+        });
+
+        const loginResult = await reponse.json();
+        console.log(loginResult);
     }
 
     return (

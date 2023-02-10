@@ -8,6 +8,7 @@ app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
 
 app.use('/register', require('./register'));
+app.use('/login', require('./login'));
 
 // create mysql connection
 const db = mysql.createConnection({
