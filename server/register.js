@@ -1,16 +1,25 @@
 const express = require('express');
 const router = express.Router();
 
+const bcrypt = require('bcrypt');
+const {v4: uuidv4} = require('uuid');
+
+const db = require('./db');
+
 const validEmail = new RegExp('^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$'); 
 const validUsername = new RegExp('^[a-zA-Z0-9_.-]*$');
 const validPassword = new RegExp('^(.{0,7}|[^0-9]*|[^A-Z]*|[^a-z]*|[a-zA-Z0-9]*)$');
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     let user = req.body.user;
     console.log(user);
 
     let registerError = verifyUser(user);
     console.log(registerError);
+
+    if (registerError === "") {
+        registerError = await saveUser(user);
+    }
 
     if (registerError != "") {
         res.send({ registerStatus: registerError });
@@ -155,6 +164,32 @@ function verifyBirthday(birthday) {
     }
 
     return "";
+}
+
+async function saveUser (user) {
+    const hashedPassword = await bcrypt.hash(user.password, 10);
+    const userID = uuidv4();
+
+    let query = 'INSERT INTO user (userId, username, email, password, birthday) values (?, ?, ?, ?, ?);';
+
+    let dbError = "";
+
+    console.log(hashedPassword);
+
+    db.query(query, [
+        userID,
+        user.username,
+        user.email,
+        hashedPassword,
+        user.birthday], (err, rows) => {
+
+            if (err) {
+                console.log(err);
+                dbError =  "Server error. Please try again.";
+            }
+    });
+
+    return dbError;
 }
 
 module.exports = router;
