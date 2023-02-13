@@ -5,12 +5,13 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
 
+const db = require('./db');
+
 app.use('/register', require('./register'));
 app.use('/login', require('./login'));
 
-const db = require('./db');
+app.get('/user', async (req, res) => {
 
-app.get('/user', (req, res) => {
     let query = 'SELECT * from user';
     db.query(query, (err, result) => {
         if (err) {

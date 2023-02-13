@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 
+
 // create mysql connection
 const db = mysql.createConnection({
     host: 'localhost',
@@ -9,6 +10,7 @@ const db = mysql.createConnection({
 });
 
 // connect DB
+
 db.connect((err) => {
     if (err) {
         console.log(err);

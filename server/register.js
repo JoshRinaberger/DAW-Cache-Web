@@ -14,7 +14,7 @@ router.post('/', async (req, res) => {
     let user = req.body.user;
     console.log(user);
 
-    let registerError = verifyUser(user);
+    let registerError = await verifyUser(user);
     console.log(registerError);
 
     if (registerError === "") {
@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
     }
 });
 
-function verifyUser(user) {
+async function verifyUser(user) {
     let registerError = verifyEmail(user.email);
 
     if (registerError != "") {
@@ -48,6 +48,24 @@ function verifyUser(user) {
     }
 
     registerError = verifyBirthday(user.birthday);
+
+    if (registerError != "") {
+        return registerError;
+    }
+
+    if (await checkDuplicateEmail(user.email) === true) {
+        console.log("EMAIL TAKEN");
+        registerError = "Email already taken.";
+    }
+
+    if (registerError != "") {
+        return registerError;
+    }
+
+    if (await checkDuplicateUsername(user.username) === true) {
+        console.log("USERNAME TAKEN");
+        registerError = "Username already taken.";
+    }
 
     if (registerError != "") {
         return registerError;
@@ -151,7 +169,7 @@ function verifyBirthday(birthday) {
 
     var currentDate = new Date();
     var birthDate = new Date(birthday);
-    console.log(birthDate);
+
     var dateDifference = currentDate.getFullYear() - birthDate.getFullYear();
     var month = currentDate.getMonth() - birthDate.getMonth();
 
@@ -174,8 +192,6 @@ async function saveUser (user) {
 
     let dbError = "";
 
-    console.log(hashedPassword);
-
     db.query(query, [
         userID,
         user.username,
@@ -190,6 +206,56 @@ async function saveUser (user) {
     });
 
     return dbError;
+}
+
+async function checkDuplicateEmail (email) {
+    let query = 'SELECT * FROM user WHERE email=?;';
+
+    let duplicateFound = false;
+
+    /*
+    await db.execute(query, [email], async (err, rows) => {
+        console.log(rows);
+    });*/
+
+    const foundUser = await getUserFromQuery(query, email);
+
+    if (foundUser.length != 0) {
+        duplicateFound = true;
+    }
+
+    return duplicateFound;
+}
+
+async function checkDuplicateUsername (username) {
+    let query = 'SELECT * FROM user WHERE username=?;';
+
+    let duplicateFound = false;
+
+    /*
+    await db.execute(query, [email], async (err, rows) => {
+        console.log(rows);
+    });*/
+
+    const foundUser = await getUserFromQuery(query, username);
+
+    if (foundUser.length != 0) {
+        duplicateFound = true;
+    }
+
+    return duplicateFound;
+}
+
+function getUserFromQuery (query, queryParam) {
+    return new Promise ((resolve, reject) => {
+        db.query(query, [queryParam], (err, rows) => {
+            if (err) {
+                console.log(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    })
 }
 
 module.exports = router;

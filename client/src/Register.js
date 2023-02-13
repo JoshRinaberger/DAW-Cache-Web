@@ -170,7 +170,7 @@ export default function Register () {
 
         var currentDate = new Date();
         var birthDate = new Date(user.birthday);
-        console.log(birthDate);
+
         var dateDifference = currentDate.getFullYear() - birthDate.getFullYear();
         var month = currentDate.getMonth() - birthDate.getMonth();
 
