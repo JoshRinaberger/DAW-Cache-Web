@@ -30,6 +30,8 @@ export default function Login () {
             return;
         } 
 
+        setLoginError("");
+
         const reponse = await fetch('/login', {
             method: "POST",
             headers: {
