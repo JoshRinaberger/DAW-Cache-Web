@@ -4,7 +4,7 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const {v4: uuidv4} = require('uuid');
 
-const db = require('./db');
+const { db, promiseQuery } = require('./db');
 
 const validEmail = new RegExp('^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$'); 
 const validUsername = new RegExp('^[a-zA-Z0-9_.-]*$');
@@ -218,7 +218,7 @@ async function checkDuplicateEmail (email) {
         console.log(rows);
     });*/
 
-    const foundUser = await getUserFromQuery(query, email);
+    const foundUser = await promiseQuery(query, [email]);
 
     if (foundUser.length != 0) {
         duplicateFound = true;
@@ -237,7 +237,7 @@ async function checkDuplicateUsername (username) {
         console.log(rows);
     });*/
 
-    const foundUser = await getUserFromQuery(query, username);
+    const foundUser = await promiseQuery(query, [username]);
 
     if (foundUser.length != 0) {
         duplicateFound = true;
@@ -246,9 +246,10 @@ async function checkDuplicateUsername (username) {
     return duplicateFound;
 }
 
-function getUserFromQuery (query, queryParam) {
+// query should be string, queryParams should be array of strings
+function getUserFromQuery (query, queryParams) {
     return new Promise ((resolve, reject) => {
-        db.query(query, [queryParam], (err, rows) => {
+        db.query(query, queryParams, (err, rows) => {
             if (err) {
                 console.log(err);
             } else {

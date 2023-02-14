@@ -19,4 +19,18 @@ db.connect((err) => {
     }
 });
 
-module.exports = db;
+// query should be string, queryParams should be array of strings
+function promiseQuery (query, queryParams) {
+    return new Promise ((resolve, reject) => {
+        db.query(query, queryParams, (err, rows) => {
+            if (err) {
+                console.log(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    })
+}
+
+exports.db = db;
+exports.promiseQuery = promiseQuery;

@@ -5,7 +5,7 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
 
-const db = require('./db');
+const { db } = require('./db');
 
 app.use('/register', require('./register'));
 app.use('/login', require('./login'));
