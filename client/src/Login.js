@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Login () {
     const [loginCredentials, setLoginCredentials] = useState({});
@@ -37,12 +37,23 @@ export default function Login () {
             headers: {
                 'Content-type': 'application/json'
             },
-            body: JSON.stringify({ loginCredentials })
+            body: JSON.stringify({ 
+                accountName: loginCredentials.accountName,
+                password: loginCredentials.password })
         });
 
         const loginResult = await reponse.json();
         console.log(loginResult);
     }
+
+    useEffect(() => {
+        fetch("/login/isAuthenticated")
+        .then(response => response.json())
+        .then(data => {
+            console.log("LOGIN AUTH");
+            console.log(data)
+        });
+    })
 
     return (
         <div>

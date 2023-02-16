@@ -18,6 +18,15 @@ function App() {
       .then(data => setMessage(data.message))
   }, []);*/
 
+async function logout(e) {
+  const reponse = await fetch('/login/logout', {
+    method: "POST",
+    headers: {
+        'Content-type': 'application/json'
+    }
+  });
+}
+
   return (
     <div className="app">
       <nav>
@@ -26,6 +35,7 @@ function App() {
           <li><Link to='/login'>Login</Link></li>
           <li><Link to='/register'>Register</Link></li>
           <li><Link to='/projects'>Projects</Link></li>
+          <li><button onClick={logout}>Logout</button></li>
         </ul>
       </nav>
       <Routes>

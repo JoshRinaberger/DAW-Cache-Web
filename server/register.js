@@ -83,7 +83,7 @@ function verifyEmail(email) {
         return "Email is required.";
     }
 
-    if (email.length > 16) {
+    if (email.length > 254) {
         return "Email must be no greater than 254 characters.";
     }
 
@@ -244,19 +244,6 @@ async function checkDuplicateUsername (username) {
     }
 
     return duplicateFound;
-}
-
-// query should be string, queryParams should be array of strings
-function getUserFromQuery (query, queryParams) {
-    return new Promise ((resolve, reject) => {
-        db.query(query, queryParams, (err, rows) => {
-            if (err) {
-                console.log(err);
-            } else {
-                resolve(rows);
-            }
-        });
-    })
 }
 
 module.exports = router;

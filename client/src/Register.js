@@ -66,7 +66,7 @@ export default function Register () {
             return false;
         }
 
-        if (user.email.length > 16) {
+        if (user.email.length > 254) {
             setRegisterError("Email must be no greater than 254 characters.");
             return false;
         }

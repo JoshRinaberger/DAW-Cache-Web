@@ -1,14 +1,29 @@
 const express = require('express');
-const router = express.Router();
 
-router.post('/', (req, res) => {
-    loginCredentials = req.body.loginCredentials;
+module.exports = function(passport) {
+    const router = express.Router();
 
-    if (loginCredentials.accountName.includes('@') && loginCredentials.accountName.includes('.')) {
-        console.log("Email");
-    } else {
-        console.log("Username");
-    }
-});
+    router.post('/', passport.authenticate('local', {
+        successRedirect: '/',
+        failureRedirect: '/login'
+    }));
 
-module.exports = router;
+    router.get('/isAuthenticated', (req, res) => {
+        console.log(req.isAuthenticated());
+        if (req.isAuthenticated()) {
+            res.send({ isAuthenticated: 'true' });
+        } else {
+            res.send({ isAuthenticated: 'false' })
+        }
+    })
+
+    router.post('/logout', (req, res) => {
+        req.logOut((err) => {
+            if (err) {
+                console.log(err);
+            }
+        });
+    });
+
+    return router;
+}

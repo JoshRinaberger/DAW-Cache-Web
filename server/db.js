@@ -1,11 +1,10 @@
 const mysql = require('mysql');
 
-
 // create mysql connection
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '123456',
+    password: process.env.DB_PASSWORD,
     database: 'daw-cache'
 });
 

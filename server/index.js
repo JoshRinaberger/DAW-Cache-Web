@@ -1,14 +1,32 @@
 const express = require('express');
 const app = express();
 
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config()
+}
+
+const session = require('express-session');
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
+}));
+
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
 
+const passport = require('passport');
+const initializePassport = require('./authLocalStrat');
+initializePassport(passport);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 const { db } = require('./db');
 
 app.use('/register', require('./register'));
-app.use('/login', require('./login'));
+app.use('/login', require('./login')(passport));
 
 app.get('/user', async (req, res) => {
 
